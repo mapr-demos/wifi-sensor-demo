@@ -183,7 +183,7 @@ dashboard and corresponding statistic.  It should look like the below screenshot
 ## Credits
 
 This demo application heavily borrows code from the following sources:
-* Tug G.'s,
+* Tug G.'s 
 [mapr-streams-vertx-dashboard](https://github.com/namato/mapr-streams-vertx-dashboard) example.
 * [sw420-mqtt](https://github.com/Wifsimster/sw420-mqtt) for talking to the SW-420 board in Lua.
 * [tdigest](https://github.com/welch/tdigest) for the Javascript implementation of Ted Dunning's T-Digest algorithm.
