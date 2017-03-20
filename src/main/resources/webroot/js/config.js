@@ -1,0 +1,4 @@
+
+SensorMacAddrs = {
+	mac1: '
+}

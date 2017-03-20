@@ -1,0 +1,176 @@
+<html>
+<head>
+  <meta name="viewport" content="width=device-width">
+
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/jke-d3-ecg.css">
+
+  <script src="js/vertx/sockjs.min.js"></script>
+  <script src="js/vertx/vertxbus.js"></script>
+  <script src="js/smoothie/smoothie.js"></script>
+
+
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#!/home">
+        <img alt="Brand" src="image/logo-04.png" width="80" height="26">
+      </a>
+    </div>
+
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="/index.html"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp;<b>ESP8266 Sensor Dashboard</b></a></li>
+      </ul>
+      <ul class="nav navbar-nav">
+        <li><a href="/log.html"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp;<b>Logs</b></a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-5">
+<span class="pull-left">
+<h3> Vibration Sensor Data (REST) </h3>
+</span>
+    </div>
+    <div class="col-md-5">
+<span class="pull-left">
+<h3> t-digest 0.5 percentile </h3>
+</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-5">
+      <canvas id="ecg-canvas1" width="400" height="500"></canvas>
+<p>&nbsp;</p>
+    </div>
+    <div class="col-md-5">
+      <canvas id="ecg-canvas2" width="400" height="500"></canvas>
+    </div>
+  </div>
+</div> <!-- /container -->
+
+
+
+<hr />
+
+<script src="js/jquery/jquery.min.js"></script>
+<script src="js/jquery/jquery-ui-widget.min.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/tdigest.js"></script>
+
+<script>
+  var line1 = new TimeSeries();
+  var line2 = new TimeSeries();
+  var line3 = new TimeSeries();
+  var line4 = new TimeSeries();
+  var line5 = new TimeSeries();
+  var line6 = new TimeSeries();
+  var line7 = new TimeSeries();
+  var line8 = new TimeSeries();
+  var line9 = new TimeSeries();
+  var line10 = new TimeSeries();
+  var line_td = new TimeSeries();
+
+  var td = new this.tdigest.TDigest();
+
+  var eb = new vertx.EventBus("http://" + location.host + "/eventbus");
+  eb.onopen = function() {
+    console.log("open");
+    eb.registerHandler("dashboard", function(data) {
+      var entry = JSON.parse(data);
+      var dobj = new Date();
+      var ts = dobj.getTime();
+      console.log(entry);
+      td.push(entry.amplitude/100);
+      td.compress();
+      line_td.append(ts, td.percentile(0.5));
+      console.log("percentile: " + td.percentile(0.5));
+      switch (entry.mac) {
+          case '18-FE-34-1A-49-B6':
+		console.log("mac1 hit" + ts + entry.amplitude / 100);
+		line1.append( ts ,  entry.amplitude/100  );
+                break;
+          case '18-FE-34-17-B5-41':
+		console.log("mac2 hit" + ts + entry.amplitude / 100);
+		line2.append( ts ,  entry.amplitude/100  );
+                break;
+          case '18-FE-34-16-9D-2F':
+		console.log("mac3 hit" + ts + entry.amplitude / 100);
+		line3.append( ts ,  entry.amplitude/100  );
+                break;
+          case '18-FE-34-16-9C-DB':
+		console.log("mac4 hit" + ts + entry.amplitude / 100);
+		line4.append( ts ,  entry.amplitude/100  );
+                break;
+          case '18-FE-34-17-B9-E6':
+		console.log("mac5 hit" + ts + entry.amplitude / 100);
+		line5.append( ts ,  entry.amplitude/100  );
+                break;
+          case '18-FE-34-95-0F-C1':
+		console.log("mac6 hit" + ts + entry.amplitude / 100);
+		line6.append( ts ,  entry.amplitude/100  );
+                break;
+          case '18-FE-34-17-BF-C2':
+		console.log("mac7 hit" + ts + entry.amplitude / 100);
+		line7.append( ts ,  entry.amplitude/100  );
+                break;
+          case '18-FE-34-16-9C-90':
+		console.log("mac8 hit" + ts + entry.amplitude / 100);
+		line8.append( ts ,  entry.amplitude/100  );
+                break;
+          case '18-FE-34-17-B2-76':
+		console.log("mac9 hit" + ts + entry.amplitude / 100);
+		line9.append( ts ,  entry.amplitude/100  );
+                break;
+          case '18-FE-34-17-BD-DA':
+		console.log("mac10 hit" + ts + entry.amplitude / 100);
+		line10.append( ts ,  entry.amplitude/100  );
+                break;
+          default:
+		console.log("BAD: default hit" + ts + entry.amplitude / 100);
+                break;
+      }
+    });
+  };
+
+// var zerotimer = setInterval(zt, 3000);
+
+// function zt() {
+//     var ldobj = new Date();
+//     var lts = ldobj.getTime();
+//     line1.append(lts, 0);
+// }
+
+var smoothie1 = new SmoothieChart({grid:{fillStyle:'#c0c0c0'},maxValue:100000, minValue:0,millisPerPixel:64});
+
+var smoothie2 = new SmoothieChart({grid:{fillStyle:'#c0c0c0'},maxValue:3000, minValue:0,millisPerPixel:64});
+
+smoothie1.addTimeSeries(line1, {lineWidth:8,strokeStyle:'rgba(0,64,128,0.98)'});
+smoothie1.addTimeSeries(line2, {lineWidth:8,strokeStyle:'rgba(0,128,128,0.98'});
+smoothie1.addTimeSeries(line3, {lineWidth:8,strokeStyle:'rgba(255,128,0,0.98'});
+smoothie1.addTimeSeries(line4, {lineWidth:8,strokeStyle:'rgba(128,0,0,0.98'});
+smoothie1.addTimeSeries(line5, {lineWidth:8,strokeStyle:'rgba(128,128,64,0.98'});
+smoothie1.addTimeSeries(line6, {lineWidth:8,strokeStyle:'rgba(64,0,64,0.98'});
+smoothie1.addTimeSeries(line7, {lineWidth:8,strokeStyle:'rgba(0,0,0,0.98'});
+smoothie1.addTimeSeries(line8, {lineWidth:8,strokeStyle:'rgba(255,255,0,0.98'});
+smoothie1.addTimeSeries(line9, {lineWidth:8,strokeStyle:'rgba(255,0,0,0.98'});
+smoothie1.addTimeSeries(line10, {lineWidth:8,strokeStyle:'rgba(0,128,0,0.98'});
+smoothie2.addTimeSeries(line_td, {lineWidth:8,strokeStyle:'rgba(0,128,0,0.98'});
+smoothie1.streamTo(document.getElementById("ecg-canvas1"), 0);
+smoothie2.streamTo(document.getElementById("ecg-canvas2"), 0);
+</script>
+</body>
+</html>
