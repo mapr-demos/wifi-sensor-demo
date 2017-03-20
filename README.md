@@ -7,8 +7,9 @@ display, the demo allows for up to 10 ESP8266 devices to be connected
 simultaneously. The incoming data from an attached SW-420 vibration
 sensor will be displayed on a live dashboard with instantaneous updates.
 
-The dashboard shows live sensor data on the left, and the right side
-shows the current [t-digest](https://github.com/tdunning/t-digest)
+![sensor image](https://github.com/mapr-demos/wifi-sensor-demo/blob/master/images/sensorpic.PNG "sensor")
+
+The dashboard shows live sensor data and the current [t-digest](https://github.com/tdunning/t-digest)
 0.5 percentile value is displayed for all connected sensors.
 
 ## Quickstart
@@ -17,7 +18,7 @@ Getting the end-to-end demo running requires these steps, which will be
 covered in detail here:
 * Build the sensor with the hardware list in the next section
 * Flash the ESP8266 device with nodemcu
-* Connect to the ESP8266 over USB and load the lua script into it
+* Connect to the ESP8266 over USB and load the lua scripts into it
 * On the cluster side, ensuring the MapR streams proxy is running on one of your MapR nodes
 * Configuring the stream
 * Building and starting the streaming web application
@@ -42,7 +43,7 @@ on Amazon [here](https://www.amazon.com/Alloet-NodeMcu-ESP8266-ESP-12E-Developme
 * SW-420 vibration sensor 
 (specs [here](https://www.elecrow.com/vibration-sensor-module-sw420-p-525.html),
 available on Amazon [here](https://www.amazon.com/Solu-SW-420-Motion-Vibration-Arduino/dp/B00YZXB9VW))
-* Breadboard or soldering skills
+* Breadboard (like [this one](http://a.co/3K30MEb) on Amazon) or soldering skills
 * Power supply, for 
 example [a 3x 1.5V AAA battery holder](https://www.amazon.com/gp/product/B01K9KYNNA)
 
@@ -53,17 +54,16 @@ The sensor can then be assembled by making the following connections from the 3 
 * Connect DO of the SW-420 to D5 of the ESP8266
 
 If you use a small breadboard and the exact parts above, the pins on the
-SW-420 line up against this particular ESP-12E module nicely, as shown
-below, eliminating the need for additional wires.
+SW-420 line up against this particular ESP-12E module nicely, as shown in the above picture, eliminating the need for additional wires.
 
 ### Updating Nodemcu on the Sensor
 
-The ESP-12E module seems to be inconsistently loaded at the factory.  Some of the modules I've recieved have software already on them, some don't.  The easiest
+The ESP-12E module seems to be inconsistently loaded at the factory.  Some of the modules I've recieved have software already on them, some do not.  The easiest
 way to ensure that you have the correct software is to load the flash yourself.
 
 Download the [nodemcu-flasher](https://github.com/nodemcu/nodemcu-flasher) tool for your platform (for Windows users, there are Windows binaries in win64/Release and win32/Release).
 
-Connect the device with the onboard micro-USB port and run EESP8266Flasher.
+Connect the device with the onboard micro-USB port and run ESP8266Flasher.
 
 After this step you should be able to see the device boot normally, using your serial communication software of choice.  The default baud rate is 9600.
 Here are a few examples for how to connect over serial:
@@ -88,7 +88,7 @@ This is normal because we haven't loaded anything onto the board yet.
 First, edit the file lua/config.lua and configure it to match your
 environment.  At a minimum you will need to edit the WiFi network and
 password, and the endpoint IP of the cluster node you will be using to
-receive the streaming data).
+receive the streaming data.
 
 I highly recommend the [luatool](https://github.com/4refr0nt/luatool)
 utility as an easy method for loading lua files onto the ESP8266.
@@ -116,9 +116,7 @@ This section assumes that you have a MapR cluster running, if not, [get one now 
 
 On one of your cluster nodes, ensure that the Kafka-REST API gateway
 (which can communicate with either Kafka or MapR Streams) is running.
-Consult the following pages:
-
-(http://maprdocs.mapr.com/home/Kafka/kafkaREST.html)
+Consult [this page](http://maprdocs.mapr.com/home/Kafka/kafkaREST.html) for more information.
 
 To install the package on a node, run:
 
@@ -134,7 +132,7 @@ $ maprcli stream topic create -path /apps/iot_stream -topic sensor-json
 ```
 
 In our case we want to the dashboard as responsive as possible.  To do so we need to reduce buffering of messages.  This can be done
-by adding a configuration entry in the kafka-rest configuration file:
+by adding a configuration entry in the kafka-rest configuration file and restarting Warden:
 
 ```
 sudo echo 'streams.buffer.max.time.ms=10' >> /opt/mapr/kafka-rest/kafka-rest-20.0.1/config/kafka-rest.properties
@@ -167,11 +165,7 @@ Next, build the application.
 mvn clean package
 ```
 
-Now run the application (assuming you are using the
-```
-mapr
-```
- user:
+Now run the application as the 'mapr' user:
 
 ```
 java -jar ./target/mapr-streams-vertx-dashboard-1.0-SNAPSHOT-fat.jar web 9090 /apps/iot-stream:sensor-json
@@ -184,11 +178,11 @@ Turn on your sensor and (optionally) verify that it's connected to the wifi netw
 You should now be able to connect to this host in any browser via the address http://host:9090 and view the 
 dashboard and corresponding statistic.  It should look like the below screenshot.
 
-![dashboard image](https://github.com/mapr-demos/wifi-sensor-demo/raw/master/src/common/images/dashboard.PNG "dashboard")
+![dashboard image](https://github.com/mapr-demos/wifi-sensor-demo/blob/master/images/dashboard.PNG "dashboard")
 
 ## Credits
 
-The web application heavily borrows code from the following sources:
+This demo application heavily borrows code from the following sources:
 * Tug G.'s,
 [mapr-streams-vertx-dashboard](https://github.com/namato/mapr-streams-vertx-dashboard) example.
 * [sw420-mqtt](https://github.com/Wifsimster/sw420-mqtt) for talking to the SW-420 board in Lua.
