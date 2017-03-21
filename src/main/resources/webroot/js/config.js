@@ -1,4 +1,0 @@
-
-SensorMacAddrs = {
-	mac1: '
-}
