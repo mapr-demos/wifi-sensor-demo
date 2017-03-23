@@ -168,7 +168,7 @@ mvn clean package
 Now run the application as the 'mapr' user:
 
 ```
-java -jar ./target/mapr-streams-vertx-dashboard-1.0-SNAPSHOT-fat.jar web 9090 /apps/iot-stream:sensor-json
+java -jar ./target/mapr-streams-vertx-dashboard-1.0-SNAPSHOT-fat.jar web 9090 /apps/iot_stream:sensor-json
 ```
 
 This creates a web server on port 9090 and listens to the topic we configured in the previous step.
