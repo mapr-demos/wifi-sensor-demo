@@ -1,6 +1,10 @@
 import machine
 import time
 import sys
+import network
+
+WIFINETWORK = 'woojers'
+WIFIPASSWD = 'calamatos'
 
 class SW40(object):
     def __init__(self, pin):
@@ -11,17 +15,34 @@ class SW40(object):
     def callback(self , pin):
         self.count += 1
 
+def wifi_setup():
+    nic = network.WLAN(network.STA_IF)
+    nic.active(True)
+    return (nic)
+
+def wifi_connect(nic):
+    nic.connect(WIFINETWORK, WIFIPASSWD)
+
+def wifi_is_connected(nic):
+    return nic.isconnected()
+
 def main():
     sensor = SW40(machine.Pin(14, machine.Pin.IN))
     ledpin = machine.Pin(2, machine.Pin.OUT)
+    nic = wifi_setup()
     try:
         while True:
+            while (wifi_is_connected(nic) == False):
+                print("connecting to wifi...")
+                wifi_connect(nic)
+                time.sleep(1)
+
             #print("count %d" % sensor.count)
-            persec = ((sensor.count + 10) / 10)
-            sleepamt = int(1000 / persec)
+            perhalfsec = ((sensor.count + 10) / 10)
+            sleepamt = int(500 / perhalfsec)
             sensor.count = 0
             #print("sleep amt is %d, persec %d" % (sleepamt, persec))
-            for i in range(0, persec):
+            for i in range(0, perhalfsec):
                 time.sleep_ms(sleepamt)
                 ledpin.low()
                 time.sleep_ms(sleepamt)
