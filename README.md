@@ -135,7 +135,7 @@ In our case we want to the dashboard as responsive as possible.  To do so we nee
 by adding a configuration entry in the kafka-rest configuration file and restarting Warden:
 
 ```
-sudo echo 'streams.buffer.max.time.ms=10' >> /opt/mapr/kafka-rest/kafka-rest-20.0.1/config/kafka-rest.properties
+sudo echo 'streams.buffer.max.time.ms=10' >> /opt/mapr/kafka-rest/kafka-rest-2.0.1/config/kafka-rest.properties
 sudo service mapr-warden restart
 ```
 
