@@ -58,7 +58,7 @@ SW-420 line up against this particular ESP-12E module nicely, as shown in the ab
 
 ### Updating Nodemcu on the Sensor
 
-The ESP-12E module seems to be inconsistently loaded at the factory.  Some of the modules I've recieved have software already on them, some do not.  The easiest
+The ESP-12E module seems to be inconsistently loaded at the factory.  Some of the modules I've received have software already on them, some do not.  The easiest
 way to ensure that you have the correct software is to load the flash yourself.
 
 Download the [nodemcu-flasher](https://github.com/nodemcu/nodemcu-flasher) tool for your platform (for Windows users, there are Windows binaries in win64/Release and win32/Release).
@@ -78,8 +78,9 @@ screen /dev/ttyUSB0 9600
 for connecting to a serial port.  Use the Device Manager to see what port the device is using; it is probably something like COM5.
 
 Upon opening the serial port you will see the message:
- ```
- init.lua not found.
+
+```
+init.lua not found.
 ```
 This is normal because we haven't loaded anything onto the board yet.
 
@@ -154,7 +155,7 @@ src/main/resources/webroot/index.html
 starting at this line of code:
 
 ```
-      switch (entry.mac) {
+switch (entry.mac) {
 ```
 
 change the addresses shown there to match yours.
