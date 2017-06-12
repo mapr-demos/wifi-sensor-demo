@@ -1,176 +1,322 @@
 <html>
+
 <head>
-  <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width">
 
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css">
-  <link rel="stylesheet" href="css/jke-d3-ecg.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/jke-d3-ecg.css">
 
-  <script src="js/vertx/sockjs.min.js"></script>
-  <script src="js/vertx/vertxbus.js"></script>
-  <script src="js/smoothie/smoothie.js"></script>
+    <script src="js/vertx/sockjs.min.js"></script>
+    <script src="js/vertx/vertxbus.js"></script>
+    <script src="js/smoothie/smoothie.js"></script>
 
 
-<body>
-<nav class="navbar navbar-inverse">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#!/home">
-        <img alt="Brand" src="image/logo-04.png" width="80" height="26">
-      </a>
-    </div>
+                    <a class="navbar-brand" href="#!/home">
+                        <img alt="Brand" src="image/logo-04.png" width="80" height="26">
+                    </a>
+                </div>
 
-    <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li><a href="/index.html"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp;<b>ESP8266 Sensor Dashboard</b></a></li>
-      </ul>
-      <ul class="nav navbar-nav">
-        <li><a href="/log.html"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp;<b>Logs</b></a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/index.html"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp;<b>ESP8266 Sensor Dashboard</b></a></li>
+                    </ul>
+                    <ul class="nav navbar-nav">
+                        <li><a href="/log.html"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp;<b>Logs</b></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
 
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-5">
-<span class="pull-left">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <span class="pull-left">
 <h3> Vibration Sensor Data (REST) </h3>
 </span>
-    </div>
-    <div class="col-md-5">
-<span class="pull-left">
+                </div>
+                <div class="col-md-5">
+                    <span class="pull-left">
 <h3> t-digest 0.5 percentile </h3>
 </span>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-5">
-      <canvas id="ecg-canvas1" width="400" height="500"></canvas>
-<p>&nbsp;</p>
-    </div>
-    <div class="col-md-5">
-      <canvas id="ecg-canvas2" width="400" height="500"></canvas>
-    </div>
-  </div>
-</div> <!-- /container -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <canvas id="ecg-canvas1" width="400" height="500"></canvas>
+                    <p>&nbsp;</p>
+                </div>
+                <div class="col-md-5">
+                    <canvas id="ecg-canvas2" width="400" height="500"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- /container -->
 
 
 
-<hr />
+        <hr />
 
-<script src="js/jquery/jquery.min.js"></script>
-<script src="js/jquery/jquery-ui-widget.min.js"></script>
-<script src="js/bootstrap/js/bootstrap.min.js"></script>
-<script src="js/tdigest.js"></script>
+        <script src="js/jquery/jquery.min.js"></script>
+        <script src="js/jquery/jquery-ui-widget.min.js"></script>
+        <script src="js/bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/tdigest.js"></script>
 
-<script>
-  var line1 = new TimeSeries();
-  var line2 = new TimeSeries();
-  var line3 = new TimeSeries();
-  var line4 = new TimeSeries();
-  var line5 = new TimeSeries();
-  var line6 = new TimeSeries();
-  var line7 = new TimeSeries();
-  var line8 = new TimeSeries();
-  var line9 = new TimeSeries();
-  var line10 = new TimeSeries();
-  var line_td = new TimeSeries();
+        <script>
+            var line1 = new TimeSeries();
+            var line2 = new TimeSeries();
+            var line3 = new TimeSeries();
+            var line4 = new TimeSeries();
+            var line5 = new TimeSeries();
+            var line6 = new TimeSeries();
+            var line7 = new TimeSeries();
+            var line8 = new TimeSeries();
+            var line9 = new TimeSeries();
+            var line10 = new TimeSeries();
+            var line11 = new TimeSeries();
+            var line12 = new TimeSeries();
+            var line13 = new TimeSeries();
+            var line14 = new TimeSeries();
+            var line15 = new TimeSeries();
+            var line16 = new TimeSeries();
+            var line17 = new TimeSeries();
+            var line18 = new TimeSeries();
+            var line19 = new TimeSeries();
+            var line20 = new TimeSeries();
+            var line21 = new TimeSeries();
+            var line_td = new TimeSeries();
 
-  var td = new this.tdigest.TDigest();
+            var td = new this.tdigest.TDigest();
 
-  var eb = new vertx.EventBus("http://" + location.host + "/eventbus");
-  eb.onopen = function() {
-    console.log("open");
-    eb.registerHandler("dashboard", function(data) {
-      var entry = JSON.parse(data);
-      var dobj = new Date();
-      var ts = dobj.getTime();
-      console.log(entry);
-      td.push(entry.amplitude/100);
-      td.compress();
-      line_td.append(ts, td.percentile(0.5));
-      console.log("percentile: " + td.percentile(0.5));
-      switch (entry.mac) {
-          case '18-FE-34-1A-49-B6':
-		console.log("mac1 hit" + ts + entry.amplitude / 100);
-		line1.append( ts ,  entry.amplitude/100  );
-                break;
-          case '18-FE-34-17-B5-41':
-		console.log("mac2 hit" + ts + entry.amplitude / 100);
-		line2.append( ts ,  entry.amplitude/100  );
-                break;
-          case '18-FE-34-16-9D-2F':
-		console.log("mac3 hit" + ts + entry.amplitude / 100);
-		line3.append( ts ,  entry.amplitude/100  );
-                break;
-          case '18-FE-34-16-9C-DB':
-		console.log("mac4 hit" + ts + entry.amplitude / 100);
-		line4.append( ts ,  entry.amplitude/100  );
-                break;
-          case '18-FE-34-17-B9-E6':
-		console.log("mac5 hit" + ts + entry.amplitude / 100);
-		line5.append( ts ,  entry.amplitude/100  );
-                break;
-          case '18-FE-34-95-0F-C1':
-		console.log("mac6 hit" + ts + entry.amplitude / 100);
-		line6.append( ts ,  entry.amplitude/100  );
-                break;
-          case '18-FE-34-17-BF-C2':
-		console.log("mac7 hit" + ts + entry.amplitude / 100);
-		line7.append( ts ,  entry.amplitude/100  );
-                break;
-          case '18-FE-34-16-9C-90':
-		console.log("mac8 hit" + ts + entry.amplitude / 100);
-		line8.append( ts ,  entry.amplitude/100  );
-                break;
-          case '18-FE-34-17-B2-76':
-		console.log("mac9 hit" + ts + entry.amplitude / 100);
-		line9.append( ts ,  entry.amplitude/100  );
-                break;
-          case '18-FE-34-17-BD-DA':
-		console.log("mac10 hit" + ts + entry.amplitude / 100);
-		line10.append( ts ,  entry.amplitude/100  );
-                break;
-          default:
-		console.log("BAD: default hit" + ts + entry.amplitude / 100);
-                break;
-      }
-    });
-  };
+            var eb = new vertx.EventBus("http://" + location.host + "/eventbus");
+            eb.onopen = function() {
+                console.log("open");
+                eb.registerHandler("dashboard", function(data) {
+                    var entry = JSON.parse(data);
+                    var dobj = new Date();
+                    var ts = dobj.getTime();
+                    console.log(entry);
+                    td.push(entry.amplitude);
+                    td.compress();
+                    line_td.append(ts, td.percentile(0.5));
+                    console.log("percentile: " + td.percentile(0.5));
+                    switch (entry.mac) {
+                        case '18-FE-34-1A-49-B6':
+                            console.log("mac1 hit" + ts + entry.amplitude);
+                            line1.append(ts, entry.amplitude);
+                            break;
+                        case '18-FE-34-17-B5-41':
+                            console.log("mac2 hit" + ts + entry.amplitude);
+                            line2.append(ts, entry.amplitude);
+                            break;
+                        case '18-FE-34-16-9D-2F':
+                            console.log("mac3 hit" + ts + entry.amplitude);
+                            line3.append(ts, entry.amplitude);
+                            break;
+                        case '18-FE-34-16-9C-DB':
+                            console.log("mac4 hit" + ts + entry.amplitude);
+                            line4.append(ts, entry.amplitude);
+                            break;
+                        case '18-FE-34-17-B9-E6':
+                            console.log("mac5 hit" + ts + entry.amplitude);
+                            line5.append(ts, entry.amplitude);
+                            break;
+                        case '18-FE-34-95-0F-C1':
+                            console.log("mac6 hit" + ts + entry.amplitude);
+                            line6.append(ts, entry.amplitude);
+                            break;
+                        case '18-FE-34-17-BF-C2':
+                            console.log("mac7 hit" + ts + entry.amplitude);
+                            line7.append(ts, entry.amplitude);
+                            break;
+                        case '18-FE-34-16-9C-90':
+                            console.log("mac8 hit" + ts + entry.amplitude);
+                            line8.append(ts, entry.amplitude);
+                            break;
+                        case '18-FE-34-17-B2-76':
+                            console.log("mac9 hit" + ts + entry.amplitude);
+                            line9.append(ts, entry.amplitude);
+                            break;
+                        case '18-FE-34-17-BD-DA':
+                            console.log("mac10 hit" + ts + entry.amplitude);
+                            line10.append(ts, entry.amplitude);
+                            break;
+                        case 'a0-20-a6-16-8c-8b':
+                            console.log("mac11 hit" + ts + entry.amplitude);
+                            line11.append(ts, entry.amplitude);
+                            break;
+                        case '5c-cf-7f-a4-31-ca':
+                            console.log("mac12 hit" + ts + entry.amplitude);
+                            line12.append(ts, entry.amplitude);
+                            break;
+                        case 'a0-20-a6-17-ac-6c':
+                            console.log("mac13 hit" + ts + entry.amplitude);
+                            line13.append(ts, entry.amplitude);
+                            break;
+                        case 'a0-20-a6-17-f3-63':
+                            console.log("mac14 hit" + ts + entry.amplitude);
+                            line14.append(ts, entry.amplitude);
+                            break;
+                        case 'a0-20-a6-13-e8-f4':
+                            console.log("mac15 hit" + ts + entry.amplitude);
+                            line15.append(ts, entry.amplitude);
+                            break;
+                        case '5c-cf-7f-a4-29-f7':
+                            console.log("mac16 hit" + ts + entry.amplitude);
+                            line16.append(ts, entry.amplitude);
+                            break;
+                        case 'a0-20-a6-1a-49-b6':
+                            console.log("mac17 hit" + ts + entry.amplitude);
+                            line17.append(ts, entry.amplitude);
+                            break;
+                        case 'a0-20-a6-13-dc-84':
+                            console.log("mac18 hit" + ts + entry.amplitude);
+                            line18.append(ts, entry.amplitude);
+                            break;
+                        case 'a0-20-a6-17-b5-41':
+                            console.log("mac19 hit" + ts + entry.amplitude);
+                            line19.append(ts, entry.amplitude);
+                            break;
+                        case 'a0-20-a6-17-b9-e6':
+                            console.log("mac20 hit" + ts + entry.amplitude);
+                            line20.append(ts, entry.amplitude);
+                            break;
+                        case 'a0-20-a6-17-e5-97':
+                            console.log("mac21 hit" + ts + entry.amplitude);
+                            line20.append(ts, entry.amplitude);
+                            break;
 
-// var zerotimer = setInterval(zt, 3000);
 
-// function zt() {
-//     var ldobj = new Date();
-//     var lts = ldobj.getTime();
-//     line1.append(lts, 0);
-// }
+                        default:
+                            console.log("BAD: default hit" + ts + entry.amplitude);
+                            break;
+                    }
+                });
+            };
 
-var smoothie1 = new SmoothieChart({grid:{fillStyle:'#c0c0c0'},maxValue:100000, minValue:0,millisPerPixel:64});
+            var smoothie1 = new SmoothieChart({
+                grid: {
+                    fillStyle: '#c0c0c0'
+                },
+                maxValue: 500,
+                minValue: 0,
+                millisPerPixel: 64
+            });
 
-var smoothie2 = new SmoothieChart({grid:{fillStyle:'#c0c0c0'},maxValue:3000, minValue:0,millisPerPixel:64});
+            var smoothie2 = new SmoothieChart({
+                grid: {
+                    fillStyle: '#c0c0c0'
+                },
+                maxValue: 8 ,
+                minValue: 0,
+                millisPerPixel: 64
+            });
 
-smoothie1.addTimeSeries(line1, {lineWidth:8,strokeStyle:'rgba(0,64,128,0.98)'});
-smoothie1.addTimeSeries(line2, {lineWidth:8,strokeStyle:'rgba(0,128,128,0.98'});
-smoothie1.addTimeSeries(line3, {lineWidth:8,strokeStyle:'rgba(255,128,0,0.98'});
-smoothie1.addTimeSeries(line4, {lineWidth:8,strokeStyle:'rgba(128,0,0,0.98'});
-smoothie1.addTimeSeries(line5, {lineWidth:8,strokeStyle:'rgba(128,128,64,0.98'});
-smoothie1.addTimeSeries(line6, {lineWidth:8,strokeStyle:'rgba(64,0,64,0.98'});
-smoothie1.addTimeSeries(line7, {lineWidth:8,strokeStyle:'rgba(0,0,0,0.98'});
-smoothie1.addTimeSeries(line8, {lineWidth:8,strokeStyle:'rgba(255,255,0,0.98'});
-smoothie1.addTimeSeries(line9, {lineWidth:8,strokeStyle:'rgba(255,0,0,0.98'});
-smoothie1.addTimeSeries(line10, {lineWidth:8,strokeStyle:'rgba(0,128,0,0.98'});
-smoothie2.addTimeSeries(line_td, {lineWidth:8,strokeStyle:'rgba(0,128,0,0.98'});
-smoothie1.streamTo(document.getElementById("ecg-canvas1"), 0);
-smoothie2.streamTo(document.getElementById("ecg-canvas2"), 0);
-</script>
-</body>
+            smoothie1.addTimeSeries(line1, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(0,64,128,0.98)'
+            });
+            smoothie1.addTimeSeries(line2, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(0,128,128,0.98'
+            });
+            smoothie1.addTimeSeries(line3, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(255,128,0,0.98'
+            });
+            smoothie1.addTimeSeries(line4, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(128,0,0,0.98'
+            });
+            smoothie1.addTimeSeries(line5, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(128,128,64,0.98'
+            });
+            smoothie1.addTimeSeries(line6, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(64,0,64,0.98'
+            });
+            smoothie1.addTimeSeries(line7, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(0,0,0,0.98'
+            });
+            smoothie1.addTimeSeries(line8, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(255,255,0,0.98'
+            });
+            smoothie1.addTimeSeries(line9, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(255,0,0,0.98'
+            });
+            smoothie1.addTimeSeries(line10, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(0,128,0,0.98'
+            });
+            smoothie1.addTimeSeries(line11, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(64,128,0,0.98'
+            });
+            smoothie1.addTimeSeries(line12, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(64,64,64,0.98'
+            });
+            smoothie1.addTimeSeries(line13, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(64,40,128,0.98'
+            });
+            smoothie1.addTimeSeries(line14, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(128,40,128,0.98'
+            });
+            smoothie1.addTimeSeries(line15, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(80,40,80,0.98'
+            });
+            smoothie1.addTimeSeries(line16, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(128,128,80,0.98'
+            });
+            smoothie1.addTimeSeries(line17, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(10,10,128,0.98'
+            });
+            smoothie1.addTimeSeries(line18, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(128,128,0,0.98'
+            });
+            smoothie1.addTimeSeries(line19, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(10,128,128,0.98'
+            });
+            smoothie1.addTimeSeries(line20, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(80,128,0,0.98'
+            });
+            smoothie1.addTimeSeries(line21, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(0,128,0,0.98'
+            });
+
+
+
+            smoothie2.addTimeSeries(line_td, {
+                lineWidth: 8,
+                strokeStyle: 'rgba(0,128,0,0.98'
+            });
+            smoothie1.streamTo(document.getElementById("ecg-canvas1"), 0);
+            smoothie2.streamTo(document.getElementById("ecg-canvas2"), 0);
+        </script>
+    </body>
+
 </html>

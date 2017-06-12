@@ -46,18 +46,24 @@ def main():
     try:
         while True:
             while (wifi_is_connected(nic) == False):
-                print("connecting to wifi...")
+                print("connecting to wifi "+ WIFINETWORK)
                 wifi_connect(nic)
-                time.sleep(1)
+                time.sleep(3)
 
-            #print("count %d" % sensor.count)
             perhalfsec = ((sensor.count + 10) / 10)
             sleepamt = int(500 / perhalfsec)
             sensor.count = 0
+
+            for i in range(0, perhalfsec):
+                time.sleep_ms(sleepamt)
+                ledpin.low()
+                time.sleep_ms(sleepamt)
+                ledpin.high()
+
             data = "{\"records\":[{\"value\": {\"mac\" :" "\"" + \
                 macaddr + "\"" ", " "\"amplitude\" :" + str(sensor.count) + "}  }]}"
             dlen = len(data)
-            msg = "/topics/%2Fapps%2Fiot-stream%3Asensor-json HTTP/1.1\r\n" \
+            msg = "POST /topics/%2Fapps%2Fiot_stream%3Asensor-json HTTP/1.1\r\n" \
                     "User-Agent: curl/7.38.0\r\n" \
                     "Host: localhost:8082\r\n" \
                     "Accept: */*\r\n" \
@@ -66,11 +72,6 @@ def main():
             #print("sleep amt is %d, persec %d" % (sleepamt, persec))
             print("posting %s" % msg)
             http_post(POST_IP, POST_PORT, msg)
-            for i in range(0, perhalfsec):
-                time.sleep_ms(sleepamt)
-                ledpin.low()
-                time.sleep_ms(sleepamt)
-                ledpin.high()
 
     except KeyboardInterrupt:
         print("exiting...")
